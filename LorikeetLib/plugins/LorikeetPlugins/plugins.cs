@@ -8,7 +8,7 @@ using NAudio;
 using NAudio.CoreAudioApi;
 using System.Windows.Forms;
 
-using base_plugin_lib;
+using LorikeetLib;
 using SlimDX.Direct3D11;
 using SlimDX.Direct3D9;
 using SlimDX;
@@ -17,7 +17,7 @@ using System.Net;
 using System.Threading;
 using System.IO;
 
-namespace test_plugin {
+namespace LorikeetPlugins {
 
     [Plugin]
     public class webhook : IRGBPlugin {

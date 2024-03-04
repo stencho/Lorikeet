@@ -131,9 +131,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LorikeetRGB\base_plugin_lib\base_plugin_lib.csproj">
-      <Project>{90BC2F7C-E8E2-4397-A7E2-30AEE68106A2}</Project>
-      <Name>base_plugin_lib</Name>
+    <ProjectReference Include="..\LorikeetLib\LorikeetLib.csproj">
+      <Project>{90bc2f7c-e8e2-4397-a7e2-30aee68106a2}</Project>
+      <Name>LorikeetLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LorikeetLib\plugins\LorikeetPlugins\LorikeetPlugins.csproj">
+      <Project>{b77cb754-1d1c-4433-8f94-a6d14994cd9c}</Project>
+      <Name>LorikeetPlugins</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

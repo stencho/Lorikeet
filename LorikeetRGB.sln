@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1500
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LorikeetRGB", "LorikeetRGB\LorikeetRGB.csproj", "{D3341F0C-B918-47DD-A706-FD365A4C2CAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LorikeetPlugins", "LorikeetLib\plugins\LorikeetPlugins\LorikeetPlugins.csproj", "{B77CB754-1D1C-4433-8F94-A6D14994CD9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test_plugin", "LorikeetRGB\plugins\test_plugin\test_plugin.csproj", "{B77CB754-1D1C-4433-8F94-A6D14994CD9C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "base_plugin_lib", "LorikeetRGB\base_plugin_lib\base_plugin_lib.csproj", "{90BC2F7C-E8E2-4397-A7E2-30AEE68106A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LorikeetLib", "LorikeetLib\LorikeetLib.csproj", "{90BC2F7C-E8E2-4397-A7E2-30AEE68106A2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LorikeetUI", "LorikeetUI\LorikeetUI.csproj", "{95A75C28-4DFD-4805-9EAA-761A0EB84F16}"
 EndProject
@@ -21,18 +19,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D3341F0C-B918-47DD-A706-FD365A4C2CAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3341F0C-B918-47DD-A706-FD365A4C2CAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3341F0C-B918-47DD-A706-FD365A4C2CAB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D3341F0C-B918-47DD-A706-FD365A4C2CAB}.Debug|x64.Build.0 = Debug|Any CPU
-		{D3341F0C-B918-47DD-A706-FD365A4C2CAB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D3341F0C-B918-47DD-A706-FD365A4C2CAB}.Debug|x86.Build.0 = Debug|Any CPU
-		{D3341F0C-B918-47DD-A706-FD365A4C2CAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3341F0C-B918-47DD-A706-FD365A4C2CAB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D3341F0C-B918-47DD-A706-FD365A4C2CAB}.Release|x64.ActiveCfg = Release|Any CPU
-		{D3341F0C-B918-47DD-A706-FD365A4C2CAB}.Release|x64.Build.0 = Release|Any CPU
-		{D3341F0C-B918-47DD-A706-FD365A4C2CAB}.Release|x86.ActiveCfg = Release|Any CPU
-		{D3341F0C-B918-47DD-A706-FD365A4C2CAB}.Release|x86.Build.0 = Release|Any CPU
 		{B77CB754-1D1C-4433-8F94-A6D14994CD9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B77CB754-1D1C-4433-8F94-A6D14994CD9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B77CB754-1D1C-4433-8F94-A6D14994CD9C}.Debug|x64.ActiveCfg = Debug|x64

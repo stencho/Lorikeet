@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace base_plugin_lib {
+namespace LorikeetLib {
     public struct led_state {
         public byte LED_pin;
 

@@ -7,8 +7,8 @@
     <ProjectGuid>{B77CB754-1D1C-4433-8F94-A6D14994CD9C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>test_plugin</RootNamespace>
-    <AssemblyName>test_plugin</AssemblyName>
+    <RootNamespace>LorikeetPlugins</RootNamespace>
+    <AssemblyName>LorikeetPlugins</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -87,13 +87,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="plugin.cs" />
+    <Compile Include="plugins.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\base_plugin_lib\base_plugin_lib.csproj">
+    <ProjectReference Include="..\..\LorikeetLib.csproj">
       <Project>{90BC2F7C-E8E2-4397-A7E2-30AEE68106A2}</Project>
-      <Name>base_plugin_lib</Name>
+      <Name>LorikeetLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
