@@ -1,6 +1,6 @@
 # Lorikeet
 
-A very simple program for setting the color of sets of WS8212 RGB LED strips
+A very simple program for setting the color of sets of WS2812 RGB LED strips
 
 Mostly incomplete. It has a plugin system, but it also can't even save or load settings yet. Uses NAudio and SlimDX for the plugin system.
 
