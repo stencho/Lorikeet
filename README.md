@@ -1,6 +1,6 @@
 # Lorikeet
 
-A small program for setting the color of sets of WS2812 RGB LED strips
+A small program for setting the color of a WS2812 RGB LED strip connected to an Arduino.
 
 Mostly incomplete. It has a plugin system, but it also can't even save or load settings yet. Uses NAudio and SlimDX for the plugin system.
 
