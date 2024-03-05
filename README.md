@@ -8,8 +8,6 @@ I use this literally every day, my settings are hardcoded in MainStripForm.cs
 
 It uses a list of 'zone' objects which specify a color, brightness, start and length. Plugins have those zones passed to them, and do things to them, before they're sent to the microcontroller. This lets plugins make the LEDs do things like blink for alerts, react to music, or change depending on screen color (some day I'll make this work)
 
-![](doody_alert.mp4)
-
 #### Contains
 - LorikeetUI: The actual program, tries to do a handshake with any serial devices and if successful, will start to send commands
 - LorikeetLib: The plugin library
