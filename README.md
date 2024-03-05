@@ -10,5 +10,5 @@ I use this literally every day, my settings are hardcoded in MainStripForm.cs
 #### Contains
 - LorikeetUI: The actual program, tries to do a handshake with any serial devices and if successful, will start to send commands
 - LorikeetLib: The plugin library
-- LorikeetLib/plugins/LorikeetPlugins: The base plugin library
+- LorikeetLib/plugins/LorikeetPlugins: A plugin containing a set of different default plugins
 - Arduino: The Arduino code
