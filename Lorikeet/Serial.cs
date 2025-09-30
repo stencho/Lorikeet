@@ -19,8 +19,6 @@ public static class Serial {
             serial_port = new SerialPort();
             serial_port.BaudRate = 115200;
             
-            Logging.Config("Attempting handshake...");
-            
             foreach (string pn in SerialPort.GetPortNames()) {
                 Logging.Config("Trying " + pn);
                 serial_port.PortName = pn;
@@ -30,7 +28,7 @@ public static class Serial {
                     Thread.Sleep(1000);
 
                     if (serial_port.IsOpen) {
-                        Logging.Config("Serial opened, sending PEEPEE");
+                        Logging.Config("Serial opened, attempting handshake");
 
                         while (attempts < 15) {
                             attempts++;
@@ -38,9 +36,9 @@ public static class Serial {
                             serial_port.Write("PEEPEE/");
 
                             var start = DateTime.UtcNow;
-                            while ((DateTime.UtcNow - start).TotalMilliseconds < 1000) {
+                            while ((DateTime.UtcNow - start).TotalMilliseconds < 500) {
                                 connect_buffer += serial_port.ReadExisting();
-                                Logging.Config(connect_buffer);
+                                //Logging.Config(connect_buffer);
                                 Thread.Sleep(5);
 
                                 if (connect_buffer.StartsWith("POOPOO")) {
@@ -79,7 +77,7 @@ public static class Serial {
             }
         }
         
-        if (!connected) Logging.Config("Failed to connect!");
+        if (!connected) Logging.Error("Failed to connect!");
         
         return false;
     }
@@ -97,7 +95,7 @@ public static class Serial {
     public static void Reconnect() {
         if (!reconnecting) {
             reconnecting = true;
-            Logging.Message("Attempting to reconnect...");
+            Logging.Warning("Attempting to reconnect...");
             Tasks.StartTask(ReconnectThread);
         }
     }
@@ -117,7 +115,7 @@ public static class Serial {
                 serial_stream.Close();
             } catch { }
             
-            Logging.Message("Disconnected");
+            Logging.Warning("Disconnected");
         }
     }
 }

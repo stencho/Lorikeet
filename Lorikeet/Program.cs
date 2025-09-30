@@ -29,7 +29,7 @@ class Program {
 
         if (!Serial.Connected) {
             while (!Serial.Connected && !Tasks.cancellation_token_source.IsCancellationRequested) {
-                Thread.Sleep(1500);
+                Thread.Sleep(3000);
                 Serial.Connect();
             }
         }
