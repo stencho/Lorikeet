@@ -26,6 +26,13 @@ class Program {
         Logging.Config("Connecting to arduino...");
         
         Serial.Connect();
+
+        if (!Serial.Connected) {
+            while (!Serial.Connected && !Tasks.cancellation_token_source.IsCancellationRequested) {
+                Thread.Sleep(1500);
+                Serial.Connect();
+            }
+        }
         
         if (Serial.Connected) {
             Tasks.StartTask(LEDUpdateThread, LED_cancellation_token);
@@ -33,7 +40,7 @@ class Program {
             while (!Tasks.cancellation_token_source.IsCancellationRequested) {
                 Thread.Sleep(15);
             }
-        }
+        } 
         
         Serial.Disconnect();
         Logging.Stop();

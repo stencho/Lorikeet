@@ -45,11 +45,11 @@ public static class Serial {
 
                                 if (connect_buffer.StartsWith("POOPOO")) {
                                     connected = true;
-                                    
+
                                     attempts = 0;
                                     connect_buffer = "";
 
-                                    if (reconnecting)  reconnecting = false;
+                                    if (reconnecting) reconnecting = false;
 
                                     break;
                                 }
@@ -67,13 +67,9 @@ public static class Serial {
 
                     if (!connected) serial_port.Close();
 
-                } catch (System.IO.IOException ex) {
+                } catch (Exception ex) {
                     failed_connect();
-                } catch (System.TimeoutException tex) {
-                    failed_connect();
-                } catch (AccessViolationException ave) {
-                    failed_connect();
-                }
+                } 
 
                 if (connected) {
                     serial_port.Close();
