@@ -17,7 +17,7 @@ public struct StripSection {
 }
 
 public class LEDStrip {
-    private byte brightness;
+    private byte brightness = 255;
     public byte Brightness {
         get => brightness;
         set {
@@ -45,40 +45,27 @@ public class LEDStrip {
 
     private byte current_section = 0;
     private byte current_byte = 0;
-    
-    public void Update() {
-        if (!Serial.Connected) return;
-        
-        buffer[0] = (byte)'Z';
-        buffer[1] = (byte)SectionCount;
-        
-        current_section = 0;
-        current_byte = 2;
-        
-        foreach (StripSection section in Sections) {
-            buffer[2 + (current_section * 4)] = section.Length;
+
+    void WriteData(byte[] buffer, int offset, int count) {
+        if (!Serial.Connected && Serial.Reconnecting) return;
             
-            buffer[2 + (current_section * 4) + 1] = section.R;
-            buffer[2 + (current_section * 4) + 2] = section.G;
-            buffer[2 + (current_section * 4) + 3] = section.B;
-
-            current_section++;
-            current_byte += 4;
+        try {
+            Serial.serial_stream.Write(buffer, offset, count);
+            Serial.serial_stream.Flush();
+            
+        } catch {
+            Serial.Disconnect();
         }
-
-        buffer[current_byte] = (byte)'/';
         
-        //Serial.serial_port.Write(buffer, 0, (SectionCount * 4) + 3);
-        Serial.serial_stream.Write(buffer, 0, (SectionCount * 4) + 3);
-        Serial.serial_stream.Flush();
+        if (!Serial.Connected)
+            Serial.Reconnect();
     }
     
     public void Clear() {
         buffer[0] = (byte)'C';
         buffer[1] = (byte)'/';
         
-        Serial.serial_stream.Write(buffer, 0, 2);
-        Serial.serial_stream.Flush();
+        WriteData(buffer, 0, 2);
     }
     
     public void SetBrightness(byte brightness) {
@@ -86,7 +73,31 @@ public class LEDStrip {
         buffer[1] = brightness;
         buffer[2] = (byte)'/';
         
-        Serial.serial_stream.Write(buffer, 0, 3);
-        Serial.serial_stream.Flush();
+        WriteData(buffer, 0, 3);
+    }
+    
+    public void Update() {
+        if (!Serial.Connected) return;
+        
+        buffer[0] = (byte)'Z';
+        buffer[1] = SectionCount;
+        
+        current_section = 0;
+        current_byte = 2;
+        
+        foreach (StripSection section in Sections) {
+            buffer[2 + (current_section * 4)] = section.Length;
+            
+            buffer[2 + (current_section * 4) + 1] = (byte)(section.R == 47 ? 48 : section.R);
+            buffer[2 + (current_section * 4) + 2] = (byte)(section.G == 47 ? 48 : section.G);
+            buffer[2 + (current_section * 4) + 3] = (byte)(section.B == 47 ? 48 : section.B);
+
+            current_section++;
+            current_byte += 4;
+        }
+
+        buffer[current_byte] = (byte)'/';
+        
+        WriteData(buffer, 0, (SectionCount * 4) + 3);
     }
 }

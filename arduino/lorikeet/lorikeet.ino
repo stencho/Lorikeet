@@ -7,7 +7,7 @@
 #define PACKET_BUFFER_SIZE 255
 
 const byte LED_PIN = 6;
-const byte LED_COUNT = 5;
+const byte LED_COUNT = 24;
 
 byte packet_buffer_pos = 0;
 byte packet_buffer[PACKET_BUFFER_SIZE];

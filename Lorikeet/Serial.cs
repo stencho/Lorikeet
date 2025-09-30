@@ -28,7 +28,7 @@ public static class Serial {
                 try {
                     serial_port.Open();
                     Thread.Sleep(1000);
-                    
+
                     if (serial_port.IsOpen) {
                         Logging.Config("Serial opened, sending PEEPEE");
 
@@ -45,8 +45,11 @@ public static class Serial {
 
                                 if (connect_buffer.StartsWith("POOPOO")) {
                                     connected = true;
+                                    
                                     attempts = 0;
                                     connect_buffer = "";
+
+                                    if (reconnecting)  reconnecting = false;
 
                                     break;
                                 }
@@ -65,13 +68,11 @@ public static class Serial {
                     if (!connected) serial_port.Close();
 
                 } catch (System.IO.IOException ex) {
-                    attempts = 0;
-                    connect_buffer = "";
-                    serial_port.Close();
+                    failed_connect();
                 } catch (System.TimeoutException tex) {
-                    attempts = 0;
-                    connect_buffer = "";
-                    serial_port.Close();
+                    failed_connect();
+                } catch (AccessViolationException ave) {
+                    failed_connect();
                 }
 
                 if (connected) {
@@ -82,16 +83,45 @@ public static class Serial {
             }
         }
         
-        if (!connected)
-            Logging.Config("Failed to connect!");
+        if (!connected) Logging.Config("Failed to connect!");
         
         return false;
+    }
+
+    static void failed_connect() {
+        attempts = 0;
+        connect_buffer = "";
+        serial_port.Close();
+    }
+    
+    private static bool reconnecting = false;
+    public static bool Reconnecting => reconnecting;
+    
+    
+    public static void Reconnect() {
+        if (!reconnecting) {
+            reconnecting = true;
+            Logging.Message("Attempting to reconnect...");
+            Tasks.StartTask(ReconnectThread);
+        }
+    }
+
+    static void ReconnectThread() {
+        while (!connected) {
+            Connect();
+            
+            Thread.Sleep(2000);
+        }
     }
 
     public static void Disconnect() {
         if (connected) {
             connected = false;
-            serial_stream.Close();
+            try {
+                serial_stream.Close();
+            } catch { }
+            
+            Logging.Message("Disconnected");
         }
     }
 }
