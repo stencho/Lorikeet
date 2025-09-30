@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Lorikeet {
+namespace LorikeetServer {
     public static class Logging {
 
         enum LOG_TYPES { MSG, WRN, ERR, CNF }

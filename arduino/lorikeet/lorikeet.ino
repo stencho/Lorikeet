@@ -7,7 +7,6 @@
 #define PACKET_BUFFER_SIZE 255
 
 const byte LED_PIN = 6;
-const byte LED_COUNT = 24;
 
 byte packet_buffer_pos = 0;
 byte packet_buffer[PACKET_BUFFER_SIZE];
@@ -19,7 +18,7 @@ Adafruit_NeoPixel strip;
 void setup() {  
   Serial.begin(115200);
   
-  strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+  strip = Adafruit_NeoPixel(255, LED_PIN, NEO_GRB + NEO_KHZ800);
   strip.begin();
   strip.clear();
   strip.show();
@@ -77,17 +76,18 @@ void loop() {
 
     for (int z = 0; z < packet_buffer[1]; z++) {
       byte len = packet_buffer[2 + (z * 4)];
-      strip.fill(strip.Color(
-        packet_buffer[2 + (z * 4) + 1], 
-        packet_buffer[2 + (z * 4) + 2], 
-        packet_buffer[2 + (z * 4) + 3]), 
+      strip.fill(
+        strip.Color(
+          packet_buffer[2 + (z * 4) + 1], 
+          packet_buffer[2 + (z * 4) + 2], 
+          packet_buffer[2 + (z * 4) + 3]), 
         current_led, len);
       
       current_led += len;          
     }
     
-    if (current_led < LED_COUNT) {
-      strip.fill(strip.Color(0,0,0), current_led, LED_COUNT - current_led);
+    if (current_led < 255) {
+      strip.fill(strip.Color(0,0,0), current_led, 255 - current_led);
     }
   
     strip.show();

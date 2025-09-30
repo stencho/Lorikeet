@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Lorikeet;
+namespace LorikeetServer;
 
 public class Tasks {
     static int _task_count = 0;

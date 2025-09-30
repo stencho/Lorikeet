@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Lorikeet;
+namespace LorikeetServer;
 using System.IO.Ports;
 
 public static class Serial {
