@@ -11,7 +11,9 @@ class Program {
         Console.CancelKeyPress += delegate (object? sender, ConsoleCancelEventArgs e) { e.Cancel = true; Exit(); };
         
         strip = new LEDStrip();
-        
+        Serial.Reconnected = () => {
+            strip.IncrementVersion();
+        };
         Start(args);
     }
     
@@ -42,9 +44,6 @@ class Program {
     }
 
     static void LEDUpdateThread() {
-        byte b = 0;
-        bool flipflop = true;
-
         if (Serial.Connected) {
             while (!LED_cancellation_token_source.IsCancellationRequested) {
                 strip.Update();
@@ -53,6 +52,8 @@ class Program {
             }
         }
     } 
+    
+    
     
     static void Exit() {
         Logging.Message("Shutting down!");

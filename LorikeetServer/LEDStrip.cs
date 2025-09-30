@@ -40,7 +40,7 @@ public unsafe struct Strip {
 public unsafe class LEDStrip {
     private Strip* strip;
     
-    public void increment_version() => strip->version++;
+    public void IncrementVersion() => strip->version++;
     
     private byte total_length = 0;
     public byte TotalLength => total_length;
@@ -69,7 +69,6 @@ public unsafe class LEDStrip {
         
         ModifySections(sections);
     }
-
     
     public void ModifySections(params StripSection[] sections) {
         strip->section_count = (byte)sections.Length;
@@ -135,7 +134,7 @@ public unsafe class LEDStrip {
     }
     
     public void Update() {
-        if (!Serial.Connected) return;
+        if (!Serial.Connected) Serial.Reconnect();
         
         if (strip->version == last_version) return;
         

@@ -1,11 +1,11 @@
 using System;
 using Bumpo;
-using Lorikeet.Effects;
+using LorikeetUI.Effects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Lorikeet.UI;
+namespace LorikeetUI.UI;
 
 public class ColorSelector {
     private RenderTarget2D color_map;

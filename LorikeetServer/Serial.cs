@@ -47,7 +47,11 @@ public static class Serial {
                                     attempts = 0;
                                     connect_buffer = "";
 
-                                    if (reconnecting) reconnecting = false;
+                                    if (reconnecting) {
+                                        reconnecting = false;
+                                        
+                                        if (Reconnected != null) Reconnected.Invoke();
+                                    }
 
                                     break;
                                 }
@@ -100,6 +104,8 @@ public static class Serial {
         }
     }
 
+    public static Action Reconnected; 
+    
     static void ReconnectThread() {
         while (!connected) {
             Connect();

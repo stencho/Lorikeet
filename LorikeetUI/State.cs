@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Lorikeet;
+namespace LorikeetUI;
 
 public static class State {
     public static GraphicsDeviceManager graphics;

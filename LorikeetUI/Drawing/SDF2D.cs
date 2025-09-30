@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Lorikeet {
+namespace LorikeetUI {
     public static class SDF {
         private static Effect sdf_effect;
         private static Effect sdf_circle_effect;

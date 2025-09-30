@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Lorikeet.Effects {
+namespace LorikeetUI.Effects {
     public class Dither : ManagedEffect {
 
         public bool clip_b = false;

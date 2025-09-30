@@ -2,7 +2,7 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using LorikeetServer;
 
-namespace Lorikeet;
+namespace LorikeetUI;
 
 public static unsafe class MappedLEDStrip {
     private static MemoryMappedFile memory_map;

@@ -6,14 +6,14 @@ using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Lorikeet.Effects;
+using LorikeetUI.Effects;
 using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace Lorikeet
+namespace LorikeetUI
 {
 
     public static class Drawing {

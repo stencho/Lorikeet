@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Lorikeet;
+using LorikeetUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Lorikeet.Effects {
+namespace LorikeetUI.Effects {
 
     public class ManagedEffect {
         public static class Manager {

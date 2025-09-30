@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LorikeetServer", "LorikeetServer\LorikeetServer.csproj", "{641C50AF-4843-4B92-B887-5CFEB1A0E0FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lorikeet", "Lorikeet\Lorikeet.csproj", "{174DDAD0-FDD7-4E2C-8A84-3E2DCA59887D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LorikeetUI", "LorikeetUI\LorikeetUI.csproj", "{174DDAD0-FDD7-4E2C-8A84-3E2DCA59887D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
