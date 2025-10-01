@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace LorikeetUI.UI;
 
-public class ColorSelector {
+public class ColorSelector : UIElement {
     private RenderTarget2D color_map;
     public Vector2 position = Vector2.Zero;
     private Vector2 size = Vector2.Zero;
@@ -64,7 +64,7 @@ public class ColorSelector {
     public Action Clicked { get; set; } 
     
     public void Update() {
-        if (Collision2D.v2_intersects_rect(State.mouse_pos, position, position + size)) {
+        if (State.game.IsActive && Collision2D.v2_intersects_rect(State.mouse_pos, position, position + size)) {
 
             var relative = State.mouse_pos - position;
             var coords = relative / size;
@@ -85,13 +85,13 @@ public class ColorSelector {
     public void GenerateMap() {
         if (initialized) return;
         
-        color_map = new RenderTarget2D(State.graphics_device, (int)size.X, (int)size.Y);
+        color_map = new RenderTarget2D(State.graphics_device, 512, 512);
         
         State.graphics_device.SetRenderTarget(color_map);
         
         ColorMap cm = new ColorMap();
         
-        cm.draw(Vector2.Zero, size);
+        cm.draw(Vector2.Zero, Vector2.One * 512);
 
         initialized = true;
     }

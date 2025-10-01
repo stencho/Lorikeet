@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework.Input;
 namespace LorikeetUI;
 
 public static class State {
+    public static Game game;
+    public static GameWindow window;
+    
     public static GraphicsDeviceManager graphics;
     public static GraphicsDevice graphics_device;
     public static ContentManager content;
@@ -19,10 +22,12 @@ public static class State {
 
     public static Vector2 mouse_pos => mouse.Position.ToVector2();
     
-    public static void Initialize(GraphicsDeviceManager graphics, GraphicsDevice graphics_device, ContentManager content) {
+    public static void Initialize(Game game, GraphicsDeviceManager graphics, GraphicsDevice graphics_device, ContentManager content, GameWindow window) {
         State.graphics = graphics;
         State.graphics_device = graphics_device;
         State.content = content;
+        State.window = window;
+        State.game = game;
     }
 
     public static void Update() {
