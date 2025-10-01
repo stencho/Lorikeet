@@ -52,8 +52,6 @@ public static class UI {
                 Elements[mouse_over_element_previous].OnMouseLeave.Invoke();
         }
         
-        mouse_over_element_previous = mouse_over_element;
-
         if (Input.MouseDelta != Vector2.Zero && !String.IsNullOrEmpty(mouse_over_element)) {
             if (Elements[mouse_over_element].OnMouseMove != null) Elements[mouse_over_element].OnMouseMove.Invoke();
         }
@@ -66,7 +64,7 @@ public static class UI {
                 foreach (var e in Elements.Keys.Reverse()) {
                     if (Elements[e].OnMouseUp != null) Elements[e].OnMouseUp.Invoke();
 
-                    if (mouse_over_element == mouse_left_down_element) {
+                    if (mouse_over_element == mouse_left_down_element && mouse_left_down_element == e) {
                         if (Elements[e].OnClick != null) Elements[e].OnClick.Invoke();
                     }
 
@@ -94,6 +92,8 @@ public static class UI {
             Elements[e].MousePosRelative = Input.mouse_pos - Elements[e].Position;
             Elements[e].Update();
         }
+        
+        mouse_over_element_previous = mouse_over_element;
     }
 
     public static void Draw() {
