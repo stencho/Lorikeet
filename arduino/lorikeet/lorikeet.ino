@@ -93,30 +93,6 @@ void loop() {
     goto done;
   }
 
-  //fill LED zones
-  else if (packet_buffer[0] == 'Z') {
-    byte current_led = 0;
-
-    for (int z = 0; z < packet_buffer[1]; z++) {
-      byte len = packet_buffer[2 + (z * 4)];
-      strip.fill(
-        strip.Color(
-          packet_buffer[2 + (z * 4) + 1], 
-          packet_buffer[2 + (z * 4) + 2], 
-          packet_buffer[2 + (z * 4) + 3]), 
-        current_led, len);
-      
-      current_led += len;          
-    }
-    
-    if (current_led < 255) {
-      strip.fill(strip.Color(0,0,0), current_led, 255 - current_led);
-    }
-  
-    strip.show();
-    goto done;
-  }
-
   //reset packet buffer and prep for next serial packet
   done:   
     packet_buffer_pos = 0;

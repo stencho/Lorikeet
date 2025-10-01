@@ -5,82 +5,69 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace LorikeetUI.UI;
+namespace LorikeetUI.UIElements;
 
 public class ColorSelector : UIElement {
     private RenderTarget2D color_map;
-    public Vector2 position = Vector2.Zero;
-    private Vector2 size = Vector2.Zero;
+    public Vector2 Position { get; set; } = Vector2.Zero;
+    public Vector2 Size { get; set; } = Vector2.Zero;
+    public Vector2 MousePosRelative { get; set; }
+    
+    public bool MouseOver { get; set; }
+    public bool LeftMouseDown { get; set; }
 
+    public Vector2 relativePosition { get; set; } = Vector2.Zero;
+    
     private bool initialized = false;
     public bool Initialized => initialized;
 
     public Color mouse_over_color = Color.White;
-    
+
+    public Action OnMouseLeave { get; set; }
+    public Action OnMouseDown { get; set; }
+    public Action OnMouseUp { get; set; }
+    public Action OnMouseMove { get; set; }
+    public Action OnClick { get; set; }
+
     public ColorSelector(Vector2 position, int width, int height) {
-        size = new Vector2(width, height);
-        this.position = position;
+        Size = new Vector2(width, height);
+        this.Position = position;
     }
     
     public static (byte R, byte G, byte B) FromSquare(float x, float y, float value) {
-        // clamp inputs
         x = Math.Clamp(x, 0f, 1f);
         y = Math.Clamp(y, 0f, 1f);
         value = Math.Clamp(value, 0f, 1f);
 
-        float hue = x;        // X maps to hue
-        float sat = y;        // Y maps to saturation
-        float val = value;    // slider maps to value/brightness
+        float hue = x;
+        float sat = y;
+        float val = value;
 
-        var (r, g, b) = HSVtoRGB(hue, sat, val);
+        var (r, g, b) = ColorUtils.HSVtoRGB(hue, sat, val);
 
-        // convert to 0–255 bytes
-        return (
-            (byte)(r * 255),
-            (byte)(g * 255),
-            (byte)(b * 255)
-        );
+        return (r, g, b);
     }
-
-    public static (float R, float G, float B) HSVtoRGB(float h, float s, float v) {
-        h = (h % 1f) * 6f; // map 0–1 hue into 0–6
-        int i = (int)Math.Floor(h);
-        float f = h - i;
-        float p = v * (1f - s);
-        float q = v * (1f - f * s);
-        float t = v * (1f - (1f - f) * s);
-
-        return i switch
-        {
-            0 => (v, t, p),
-            1 => (q, v, p),
-            2 => (p, v, t),
-            3 => (p, q, v),
-            4 => (t, p, v),
-            _ => (v, p, q),
-        };
-    }
-
-    public Action Clicked { get; set; } 
     
     public void Update() {
-        if (State.game.IsActive && Collision2D.v2_intersects_rect(State.mouse_pos, position, position + size)) {
+        if (State.game.IsActive && Collision2D.v2_intersects_rect(Input.mouse_pos, Position, Position + Size)) {
 
-            var relative = State.mouse_pos - position;
-            var coords = relative / size;
+            var relative = Input.mouse_pos - Position;
+            var coords = relative / Size;
 
             var RGB = FromSquare(coords.X, coords.Y, 1.0f);
             mouse_over_color = Color.FromNonPremultiplied(RGB.R, RGB.G, RGB.B, 255);
 
-
-            if (State.mouse.LeftButton == ButtonState.Pressed) {
-                if (Clicked != null) {
-                    Clicked.Invoke();
-                }
+            if (Input.mouse.LeftButton == ButtonState.Pressed) {
+                //if (Clicked != null) {
+                //    Clicked.Invoke();
+                //}
             }
         } else
             mouse_over_color = Color.White;
     }
+
+    public Action OnMouseEnter { get; set; }
+
 
     public void GenerateMap() {
         if (initialized) return;
@@ -95,8 +82,8 @@ public class ColorSelector : UIElement {
 
         initialized = true;
     }
-    
+
     public void Draw() {
-        Drawing.image(color_map, Vector2.One * 100, size);
+        Drawing.image(color_map, Vector2.One * 100, Size);
     }
 }

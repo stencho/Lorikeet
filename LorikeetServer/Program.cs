@@ -3,7 +3,7 @@
 namespace LorikeetServer;
 
 class Program {
-    private static LEDStripIndividual strip;
+    private static LEDStrip strip;
     
     internal static CancellationTokenSource LED_cancellation_token_source = new CancellationTokenSource();
     internal static CancellationToken LED_cancellation_token => LED_cancellation_token_source.Token;
@@ -12,7 +12,7 @@ class Program {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
         Console.CancelKeyPress += delegate (object? sender, ConsoleCancelEventArgs e) { e.Cancel = true; Exit(); };
         
-        strip = new LEDStripIndividual(24, new LED(255,0,255));
+        strip = new LEDStrip(24);
         
         Serial.Reconnected = () => {
             strip.IncrementVersion();
@@ -55,8 +55,6 @@ class Program {
             }
         }
     } 
-    
-    
     
     static void Exit() {
         Logging.Message("Shutting down!");
