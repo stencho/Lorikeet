@@ -24,17 +24,36 @@ public static class UI {
     
     public static void AddElement(string name, UIElement element) {
         Elements.Add(name, element);
+        Elements[name].Visible = true;
+    }
+    public static void AddHiddenElement(string name, UIElement element) {
+        Elements.Add(name, element);
+        Elements[name].Visible = false;
+    }
+
+    public static void ShowElement(string name) {
+        if (Elements.ContainsKey(name)) Elements[name].Visible = true;
+    }
+    public static void HideElement(string name) {
+        if (Elements.ContainsKey(name)) Elements[name].Visible = false;
+    }
+    public static void ToggleElement(string name) {
+        if (Elements.ContainsKey(name)) Elements[name].Visible = !Elements[name].Visible;
     }
 
     public static void Update() {
         //MOUSE OVER
         foreach (var e in Elements.Keys.Reverse()) {
+            if (!Elements[e].Visible) continue;
+            
             Elements[e].MouseOver = false;
         }
 
         mouse_over_element = String.Empty;
         
         foreach (var e in Elements.Keys.Reverse()) {
+            if (!Elements[e].Visible) continue;
+            
             UIElement element = Elements[e];
 
             if (Collision2D.v2_intersects_rect(Input.mouse_pos, element.Position, element.Position + element.Size)) {
@@ -62,6 +81,8 @@ public static class UI {
                 if (!String.IsNullOrEmpty(mouse_left_down_element)) Elements[mouse_left_down_element].LeftMouseDown = false;
                 
                 foreach (var e in Elements.Keys.Reverse()) {
+                    if (!Elements[e].Visible) continue;
+                    
                     if (Elements[e].OnMouseUp != null) Elements[e].OnMouseUp.Invoke();
 
                     if (mouse_over_element == mouse_left_down_element && mouse_left_down_element == e) {
@@ -76,6 +97,8 @@ public static class UI {
                 left_mouse_down = true;
                 
                 foreach (var e in Elements.Keys) {
+                    if (!Elements[e].Visible) continue;
+                    
                     Elements[e].LeftMouseDown = false;
                 }
                 
@@ -90,6 +113,8 @@ public static class UI {
 
         foreach (var e in Elements.Keys) {
             Elements[e].MousePosRelative = Input.mouse_pos - Elements[e].Position;
+            
+            if (!Elements[e].Visible) continue;
             Elements[e].Update();
         }
         
@@ -98,6 +123,8 @@ public static class UI {
 
     public static void Draw() {
         foreach (var e in Elements.Keys) {
+            if (!Elements[e].Visible) continue;
+                
             Elements[e].Draw();
         }
     }
@@ -111,6 +138,7 @@ public interface UIElement {
     
     public bool MouseOver { get; internal set; }
     public bool LeftMouseDown { get; internal set; }
+    public bool Visible { get; set; }
     
     public void Draw();
     public void Update();

@@ -15,7 +15,8 @@ public class ColorSelector : UIElement {
     
     public bool MouseOver { get; set; }
     public bool LeftMouseDown { get; set; }
-
+    public bool Visible { get; set; } = true;
+    
     public Vector2 relativePosition { get; set; } = Vector2.Zero;
     
     private bool initialized = false;

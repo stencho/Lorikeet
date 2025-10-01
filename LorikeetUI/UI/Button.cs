@@ -10,6 +10,7 @@ public class Button : UIElement {
     public Vector2 MousePosRelative { get; set; }
     public bool MouseOver { get; set; }
     public bool LeftMouseDown { get; set; }
+    public bool Visible { get; set; } = true;
 
     public string Text { get; set; }
     
@@ -36,9 +37,7 @@ public class Button : UIElement {
         Drawing.rect(Position, Position + Size, UI.ForegroundColor, 1f);
     }
 
-    public void Update() {  
-        
-    }
+    public void Update() { }
 
     public Action OnMouseEnter { get; set; }
     public Action OnMouseLeave { get; set; }
