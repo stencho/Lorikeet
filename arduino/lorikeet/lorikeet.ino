@@ -23,7 +23,6 @@ void setup() {
   strip = Adafruit_NeoPixel(255, LED_PIN, NEO_GRB + NEO_KHZ800);
   strip.begin();
   strip.clear();
-  //strip.fill(strip.Color(0,255,0), 0, 255);
   strip.show();
   
   memset(packet_buffer, 0, PACKET_BUFFER_SIZE);
@@ -86,7 +85,7 @@ void loop() {
     }
 
     if (leds_in_buffer < 255) {
-      //strip.fill(strip.Color(0,0,0), leds_in_buffer, 255 - leds_in_buffer);
+      strip.fill(strip.Color(0,0,0), leds_in_buffer, 255 - leds_in_buffer);
     }
     
     strip.show();
