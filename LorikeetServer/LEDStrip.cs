@@ -22,7 +22,7 @@ public struct LED {
 public unsafe struct StripIndividual {
     public int version = 0;
     public byte brightness = 255;
-    public byte LEDCount;
+    public byte LEDCount = 0;
 
     public LED* LEDs {
         get {
@@ -76,14 +76,14 @@ public unsafe class LEDStrip {
         strip = (StripIndividual*)ptr;
         
         AddLEDs(led_count, R, G, B);
+
+        strip->LEDCount = led_count;
         
         strip->increment_version();
     }
 
     private void AddLEDs(byte count, byte R, byte G, byte B ) {
-        strip->LEDCount = count;
-
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < (strip->LEDCount > count ? count : strip->LEDCount); i++) {
             *(strip->LEDs + i) = new LED(R, G, B);
         }
     }
@@ -181,26 +181,16 @@ public static unsafe class MappedLEDStrip {
     public static StripIndividual* strip;
     public static LED* LEDs;
 
-    public static void ModifyLEDs(params LED[] LEDs) {
-        strip->LEDCount = (byte)LEDs.Length;
-
-        for (int i = 0; i < LEDs.Length; i++) {
-            *(strip->LEDs + i) = LEDs[i];
-        }
-
+    public static byte LEDCount => strip->LEDCount; 
+    
+    public static void Fill(byte R, byte G, byte B) {
+        for (int i = 0; i < strip->LEDCount; i++)
+            *(strip->LEDs + i) = new LED(R,G,B);
+        
         strip->increment_version();
     }
     
-    public static void ModifyLEDs(byte count, LED color) {
-        strip->LEDCount = count;
-
-        for (int i = 0; i < count; i++) {
-            *(strip->LEDs + i) = color;
-        }
-
-        strip->increment_version();
-    }
-
+    
     public static void SetLEDColor(byte led_index, byte R, byte G, byte B) {
         if (led_index >= strip->LEDCount) return;
         
@@ -219,15 +209,17 @@ public static unsafe class MappedLEDStrip {
         SetLEDColor(led_index, R, G, B);
     }
     
-    public static void FillSection(byte offset, byte length, byte R, byte G, byte B) {
+    public static void Fill(byte offset, byte length, byte R, byte G, byte B) {
+        if (offset > LEDCount) return;
+        if (offset + length > 255) length = (byte)(255 - offset); 
         for (byte i = offset; i < offset + length; i++) {
             SetLEDColor(i, R, G, B);
         }
     }
     
-    public static void FillSection(byte offset, byte length, float h, float s, float v) {
+    public static void Fill(byte offset, byte length, float h, float s, float v) {
         var (R, G, B) = ColorUtils.HSVtoRGB(h, s, v);
-        FillSection(offset, length, R, G, B);
+        Fill(offset, length, (float)R, G, B);
 
     }
 

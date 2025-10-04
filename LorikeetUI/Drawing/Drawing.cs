@@ -50,7 +50,7 @@ namespace LorikeetUI
         };
         internal static int[] ib_data = { 0, 1, 2, 1, 3, 2 };
 
-        public static void load(GraphicsDevice gd, GraphicsDeviceManager gdm, ContentManager content, Vector2 resolution) {
+        public static void load(GraphicsDevice gd, GraphicsDeviceManager gdm, ContentManager content, XYPair resolution) {
             sb = new SpriteBatch(gd);
 
             graphics_device = gd;
@@ -146,6 +146,17 @@ namespace LorikeetUI
             sb.Draw(OnePXWhite, position, color);
         }
         
+        public static void line(XYPair A, XYPair B, Color color, float thickness) {
+            begin();
+
+            var tan = B - A;
+            var rot = (float)Math.Atan2(tan.Y, tan.X);
+
+            var middlePoint = new Vector2(0, 0.5f);
+            var scale = new Vector2(tan.Length(), thickness);
+
+            sb.Draw(OnePXWhite, A.ToVector2(), null, color, rot, middlePoint, scale, SpriteEffects.None, 0f);
+        }
         public static void line(Vector2 A, Vector2 B, Color color, float thickness) {
             begin();
 
@@ -163,6 +174,12 @@ namespace LorikeetUI
 
             fill_circle(A, thickness + 1f, color);
             fill_circle(B, thickness + 1f, color);
+        }
+        public static void line_rounded_ends(XYPair A, XYPair B, Color color, float thickness) {
+            line(A, B, color, thickness);
+
+            fill_circle(A.ToVector2(), thickness / 2f, color);
+            fill_circle(B.ToVector2(), thickness / 2f, color);
         }
         
         public static void cross(Vector2 center, float size, Color color) {
@@ -188,12 +205,42 @@ namespace LorikeetUI
                 //fill_circle(points[i], thickness, color);
             //}
         }
+        public static void poly(Color color, float thickness, bool close_polygon, params XYPair[] points) {
+            if (points.Length < 2) return;
+            begin();
+
+            for (var i = 0; i < points.Length - 1; i++) {
+                var p = points[i];
+                var pP = points[i + 1];
+                line(p, pP, color, thickness);
+            }
+
+            if (points.Length > 2 && close_polygon)
+                line(points.First(), points.Last(), color, thickness);
+
+            //for (var i = 0; i < points.Length; i++) {
+            //fill_circle(points[i], thickness, color);
+            //}
+        }
 
         public static void tri(Vector2 A, Vector2 B, Vector2 C, Color color, float thickness) {
             begin();
             poly(color, thickness, true, A, B, C);
         }
+        public static void tri(XYPair A, XYPair B, XYPair C, Color color, float thickness) {
+            begin();
+            poly(color, thickness, true, A.ToVector2(), B.ToVector2(), C.ToVector2());
+        }
         
+        public static void rect(Vector2 min, float size_x, float size_y, Color color, float thickness) {
+            rect(min, min + new Vector2(size_x, size_y), color, thickness);
+        }
+        public static void rect(XYPair min, float size_x, float size_y, Color color, float thickness) {
+            rect(min.ToVector2(), min.ToVector2() + new Vector2(size_x, size_y), color, thickness);
+        }
+        public static void rect(XYPair min, XYPair max, Color color, float thickness) {
+            rect(min.ToVector2(), max.ToVector2(), color, thickness);
+        }
         public static void rect(Vector2 min, Vector2 max, Color color, float thickness) {
             min.Floor(); max.Ceiling();
             begin();
@@ -217,9 +264,6 @@ namespace LorikeetUI
             //right
             line(min + w, min + h + w, color, thickness);
         }
-        public static void rect(Vector2 min, float size_x, float size_y, Color color, float thickness) {
-            rect(min, min + new Vector2(size_x, size_y), color, thickness);
-        }
 
         public static void fill_rect(Vector2 min, float size_x, float size_y, Color color) {
             fill_rect(min, min + new Vector2(size_x, size_y), color);
@@ -231,18 +275,36 @@ namespace LorikeetUI
             sb.Draw(OnePXWhite, min, null, color, 0f, Vector2.Zero, max - min, SpriteEffects.None, 0f);
         }
 
-        public static void fill_rect_dither(Vector2 min, Vector2 max, Color color_a, Color color_b) {
+        public static void fill_rect(XYPair min, XYPair max, Color color) {
+            begin();
+            sb.Draw(OnePXWhite, min.ToVector2(), null, color, 0f, Vector2.Zero, (max - min).ToVector2(), SpriteEffects.None, 0f);
+        }
+        
+        public static void fill_rect_dither(XYPair min, XYPair max, Color color_a, Color color_b, int modulo = 2) {
             if (dither_effect == null) dither_effect = new Dither(content);
 
-            dither_effect.configure_shader(min, max, color_a, color_b);
+            dither_effect.configure_shader(min.ToVector2(), max.ToVector2(), color_a, color_b, modulo);
             dither_effect.begin_spritebatch(sb);
+            sb.Draw(OnePXWhite, min.ToVector2(), null, Color.White, 0f, Vector2.Zero, (max - min).ToVector2(), SpriteEffects.None, 0f);
+            end();
+        }
+        public static void fill_rect_dither(Vector2 min, Vector2 max, Color color_a, Color color_b, int modulo = 2) {
+            if (dither_effect == null) dither_effect = new Dither(content);
+
+            dither_effect.configure_shader(min, max, color_a, color_b, modulo);
+            dither_effect.begin_spritebatch(sb);
+            
             sb.Draw(OnePXWhite, min, null, Color.White, 0f, Vector2.Zero, (max - min), SpriteEffects.None, 0f);
             end();
         }
 
-
         public static void fill_rect_outline(Vector2 min, Vector2 max, Color color, Color outline, float outline_thickness) {
             min.Floor(); max.Ceiling();
+            fill_rect(min, max, color);
+            rect(min, max, outline, outline_thickness);
+        }
+        
+        public static void fill_rect_outline(XYPair min, XYPair max, Color color, Color outline, float outline_thickness) {
             fill_rect(min, max, color);
             rect(min, max, outline, outline_thickness);
         }
@@ -290,6 +352,42 @@ namespace LorikeetUI
             sb.Draw(image, new Rectangle(position, size), Color.White);
         }
         
+        public static void image(Texture2D image, XYPair position, XYPair size) {
+            begin();
+            sb.Draw(image, new Rectangle(position.ToPoint(), size.ToPoint()), Color.White);
+        }
+        public static void image(RenderTarget2D image, XYPair position, XYPair size) {
+            begin();
+            sb.Draw(image, new Rectangle(position.ToPoint(), size.ToPoint()), Color.White);
+        }
+        public static void image(RenderTarget2D image, XYPair position, XYPair size, XYPair crop_position, XYPair crop_size) {
+            begin();
+            sb.Draw(image, 
+                new Rectangle(position.ToPoint(), size.ToPoint()), 
+                new Rectangle(crop_position.X, crop_position.Y, crop_size.X, crop_size.Y), 
+                Color.White);
+        }
+        public static void image(Texture2D image, XYPair position, XYPair size, XYPair crop_position, XYPair crop_size) {
+            begin();
+            sb.Draw(image,
+                new Rectangle(position.ToPoint(), size.ToPoint()),
+                new Rectangle(crop_position.X, crop_position.Y, crop_size.X, crop_size.Y),
+                Color.White);
+        }
+        public static void image(RenderTarget2D image, XYPair position, XYPair size, XYPair crop_position, XYPair crop_size, Color tint) {
+            begin();
+            sb.Draw(image,
+                new Rectangle(position.ToPoint(), size.ToPoint()),
+                new Rectangle(crop_position.X, crop_position.Y, crop_size.X, crop_size.Y),
+                tint);
+        }
+        public static void image(Texture2D image, XYPair position, XYPair size, XYPair crop_position, XYPair crop_size, Color tint) {
+            begin();
+            sb.Draw(image,
+                new Rectangle(position.ToPoint(), size.ToPoint()),
+                new Rectangle(crop_position.X, crop_position.Y, crop_size.X, crop_size.Y),
+                tint);
+        }
         public static void image(Texture2D image, Vector2 position, Vector2 size, Color tint) {
             begin();
             sb.Draw(image, new Rectangle(position.ToPoint(), size.ToPoint()), tint);
@@ -332,6 +430,9 @@ namespace LorikeetUI
                 Color.White);
         }
 
+        public static void text(string text, XYPair position, Color color) {
+            Drawing.text(text, position.ToVector2(), color);
+        }
         public static void text(string text, Vector2 position, Color color) {
             begin();
             position.Ceiling(); //this prevents half-pixel positioning which helps keep text crisp and artifact-free
@@ -343,15 +444,15 @@ namespace LorikeetUI
             sb.DrawString(fnt_profont, text, position, color, MathHelper.ToRadians(90f), Vector2.Zero, 1f, SpriteEffects.None, 1f);
         }
 
-        public static void text_shadow(string text, Vector2 position, Color color_fg, Color color_bg) {
-            Drawing.text(text, position + Vector2.One, color_bg);
+        public static void text_shadow(string text, XYPair position, Color color_fg, Color color_bg) {
+            Drawing.text(text, position + XYPair.One, color_bg);
             Drawing.text(text, position, color_fg);
         }
-        public static void text_shadow(string text, Vector2 position, Color color_fg, Color color_bg, Vector2 shadow_offset) {
+        public static void text_shadow(string text, XYPair position, Color color_fg, Color color_bg, XYPair shadow_offset) {
             Drawing.text(text, position + shadow_offset, color_bg);
             Drawing.text(text, position, color_fg);
-        }
-        public static void text_shadow(string text, Vector2 position, Color color_fg, Color color_bg, params Vector2[] shadow_offsets) {
+        }     
+        public static void text_shadow(string text, XYPair position, Color color_fg, Color color_bg, params XYPair[] shadow_offsets) {
             foreach (var offset in shadow_offsets) 
                 Drawing.text(text, position + offset, color_bg);
 
@@ -367,6 +468,11 @@ namespace LorikeetUI
             return fnt_profont.MeasureString(text).ToPoint();
             //return new Point(1, 1);
             //return font_manager_profont.measure_string(text).ToPoint();
+        }
+        public static XYPair measure_string_profont_xy(string text) {
+            return fnt_profont.MeasureString(text).ToXYPair();
+            //return XYPair.One;
+            //return font_manager_profont.measure_string(text);
         }
     }
 }

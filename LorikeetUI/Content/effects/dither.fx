@@ -23,6 +23,8 @@ float4x4 world;
 
 bool clip_b = false;
 
+int modulo = 2;
+
 struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
@@ -39,8 +41,8 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
 	float4 color = input.Color;
 
-	bool x = px_i.x % 2 == 0;
-	bool y = px_i.y % 2 == 0;
+	bool x = px_i.x % modulo == 0;
+	bool y = px_i.y % modulo == 0;
 
 	if ((x && y) || (!x && !y)) {
 		color *= color_a;

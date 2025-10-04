@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SwoopLib;
 
 namespace LorikeetUI {
     public class AutoRenderTarget {

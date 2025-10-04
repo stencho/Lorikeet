@@ -7,7 +7,7 @@ namespace LorikeetUI.Effects {
 
         public bool clip_b = false;
 
-        public void configure_shader(Vector2 top_left, Vector2 bottom_right, Color color_a, Color color_b) {
+        public void configure_shader(Vector2 top_left, Vector2 bottom_right, Color color_a, Color color_b, int modulo) {
             set_param("clip_b", clip_b);
 
             set_param("color_a", color_a);
@@ -15,6 +15,8 @@ namespace LorikeetUI.Effects {
 
             set_param("top_left", top_left);
             set_param("bottom_right", bottom_right);
+            
+            set_param("modulo", modulo);
         }
 
         public Dither(ContentManager content) : base(content, "effects/dither") {}

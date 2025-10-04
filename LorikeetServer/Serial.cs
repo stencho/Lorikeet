@@ -14,10 +14,14 @@ public static class Serial {
     public static SerialPort serial_port;
     public static FileStream serial_stream;
     
-    public static bool Connect() {
+    public static bool Connect( out byte led_count) {
+        led_count = 0;
         if (!connected) {
             serial_port = new SerialPort();
             serial_port.BaudRate = 115200;
+            
+            serial_port.DtrEnable = true;
+            serial_port.RtsEnable = true;
             
             foreach (string pn in SerialPort.GetPortNames()) {
                 Logging.Config("Trying " + pn);
@@ -38,12 +42,15 @@ public static class Serial {
                             var start = DateTime.UtcNow;
                             while ((DateTime.UtcNow - start).TotalMilliseconds < 500) {
                                 connect_buffer += serial_port.ReadExisting();
-                                //Logging.Config(connect_buffer);
+                                Logging.Config($"buffer: {connect_buffer}");
                                 Thread.Sleep(5);
 
                                 if (connect_buffer.StartsWith("POOPOO")) {
                                     connected = true;
 
+                                    var chars = connect_buffer.ToCharArray();
+                                    led_count = (byte)chars[6];
+                                    
                                     attempts = 0;
                                     connect_buffer = "";
 
@@ -82,7 +89,7 @@ public static class Serial {
         }
         
         if (!connected) Logging.Error("Failed to connect!");
-        
+
         return false;
     }
 
@@ -108,7 +115,7 @@ public static class Serial {
     
     static void ReconnectThread() {
         while (!connected) {
-            Connect();
+            Connect(out _);
             
             Thread.Sleep(2000);
         }

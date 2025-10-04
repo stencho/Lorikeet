@@ -11,10 +11,11 @@ public class ColorSelector : UIElement {
     private RenderTarget2D color_map;
     public Vector2 Position { get; set; } = Vector2.Zero;
     public Vector2 Size { get; set; } = Vector2.Zero;
-    public Vector2 MousePosRelative { get; set; }
     
-    public bool MouseOver { get; set; }
-    public bool LeftMouseDown { get; set; }
+    public InputState InputState { get; set; }
+    public UIActions Actions { get; set; }
+    public RenderState RenderState { get; set; }
+
     public bool Visible { get; set; } = true;
     
     public Vector2 relativePosition { get; set; } = Vector2.Zero;
@@ -23,12 +24,6 @@ public class ColorSelector : UIElement {
     public bool Initialized => initialized;
 
     public Color mouse_over_color = Color.White;
-
-    public Action OnMouseLeave { get; set; }
-    public Action OnMouseDown { get; set; }
-    public Action OnMouseUp { get; set; }
-    public Action OnMouseMove { get; set; }
-    public Action OnClick { get; set; }
 
     public ColorSelector(Vector2 position, int width, int height) {
         Size = new Vector2(width, height);
@@ -82,6 +77,9 @@ public class ColorSelector : UIElement {
         cm.draw(Vector2.Zero, Vector2.One * 512);
 
         initialized = true;
+    }
+
+    public void PreDraw() {
     }
 
     public void Draw() {

@@ -7,6 +7,7 @@
 #define PACKET_BUFFER_SIZE 900
 
 const byte LED_PIN = 6;
+const byte LED_COUNT = 24;
 
 int packet_buffer_pos = 0;
 int packet_size = 0;
@@ -20,7 +21,7 @@ Adafruit_NeoPixel strip;
 void setup() {  
   Serial.begin(115200);
   
-  strip = Adafruit_NeoPixel(255, LED_PIN, NEO_GRB + NEO_KHZ800);
+  strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
   strip.begin();
   strip.clear();
   strip.show();
@@ -33,6 +34,8 @@ void setup() {
   clock_prescale_set(clock_div_1);
 #endif  
 }
+
+const byte handshake[7] = { 'P', 'O', 'O', 'P', 'O', 'O', LED_COUNT };
 
 void loop() {  
   //Serial packet loop
@@ -55,8 +58,9 @@ void loop() {
 
   //handle peepee poopoo handshake
   if (packet_buffer[0] == 'P' && packet_buffer[1] == 'E' && packet_buffer[2] == 'E' 
-   && packet_buffer[3] == 'P' && packet_buffer[4] == 'E' && packet_buffer[5] == 'E') {    
-    Serial.print("POOPOO");    
+   && packet_buffer[3] == 'P' && packet_buffer[4] == 'E' && packet_buffer[5] == 'E') {        
+    Serial.write(handshake,7);
+    Serial.flush();
     goto done;
   }       
 
@@ -84,8 +88,8 @@ void loop() {
         packet_buffer[1 + (i * 3) + 2]);        
     }
 
-    if (leds_in_buffer < 255) {
-      strip.fill(strip.Color(0,0,0), leds_in_buffer, 255 - leds_in_buffer);
+    if (leds_in_buffer < LED_COUNT) {
+      strip.fill(strip.Color(0,0,0), leds_in_buffer, LED_COUNT - leds_in_buffer);
     }
     
     strip.show();

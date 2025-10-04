@@ -12,7 +12,6 @@ class Program {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
         Console.CancelKeyPress += delegate (object? sender, ConsoleCancelEventArgs e) { e.Cancel = true; Exit(); };
         
-        strip = new LEDStrip(24);
         
         Serial.Reconnected = () => {
             strip.IncrementVersion();
@@ -24,17 +23,20 @@ class Program {
         Logging.Start();
 
         Logging.Config("Connecting to arduino...");
+
+        byte led_count = 0;
         
-        Serial.Connect();
+        Serial.Connect(out led_count);
 
         if (!Serial.Connected) {
             while (!Serial.Connected && !Tasks.cancellation_token_source.IsCancellationRequested) {
                 Thread.Sleep(3000);
-                Serial.Connect();
+                Serial.Connect(out led_count);
             }
         }
         
         if (Serial.Connected) {
+            strip = new LEDStrip(led_count);
             Tasks.StartTask(LEDUpdateThread, LED_cancellation_token);
             
             while (!Tasks.cancellation_token_source.IsCancellationRequested) {
